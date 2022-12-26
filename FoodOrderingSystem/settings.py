@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
-    'accounts'
-    
+    'accounts',
+    'restaurant'
 ]
 AUTH_USER_MODEL='accounts.User'
 MIDDLEWARE = [
