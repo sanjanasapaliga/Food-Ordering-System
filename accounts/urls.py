@@ -7,11 +7,11 @@ urlpatterns = [
     path('registerUser/', views.registerUser, name='registerUser'),
     path('registerRestaurant/', views.registerRestaurant, name='registerRestaurant'),
 
-    # path('login/', views.login, name='login'),
-    # path('logout/', views.logout, name='logout'),
-    # path('myAccount/', views.myAccount, name='myAccount'),
-    # path('custDashboard/', views.custDashboard, name='custDashboard'),
-    # path('vendorDashboard/', views.vendorDashboard, name='vendorDashboard'),
+    path('login/', views.login, name='login'),
+    path('logout/', views.logout, name='logout'),
+    path('myAccount/', views.myAccount, name='myAccount'),
+    path('custDashboard/', views.custDashboard, name='custDashboard'),
+    path('restaurantDashboard/', views.restaurantDashboard, name='restaurantDashboard'),
 
     # path('activate/<uidb64>/<token>/', views.activate, name='activate'),
 

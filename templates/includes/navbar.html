@@ -70,13 +70,27 @@
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
 							<div class="login-option">
+								{% if user.is_authenticated%}
+								<a class="cs-color cs-popup-joinus-btn login-popup"  href={% url 'myAccount'%}>
+									My account
+								</a>
+								<a class="cs-color cs-popup-joinus-btn login-popup text-danger"  href={% url 'logout'%}>
+									Logout 
+								</a>
+								
+
+								{% else %}
+								<a class="cs-color cs-popup-joinus-btn login-popup"  href={% url 'login'%}>
+									Login 
+								</a>
 								<a class="cs-color cs-popup-joinus-btn login-popup"  href={% url 'registerUser'%}>
-									Login / Register
+								   Register
 								</a>
 								<a class="get-start-btn" href={% url 'registerRestaurant'%}>
 									Register
 									Restaurant 
 								</a>
+								{% endif %}
 							</div>
 						</div>
 					</div>
