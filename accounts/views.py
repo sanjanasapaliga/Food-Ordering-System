@@ -10,6 +10,7 @@ from django.contrib import messages,auth
 from .utils import detectUser,send_verification_email
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.core.exceptions import PermissionDenied
+from restaurant.models import Restaurant
 
 # Restrict the vendor from accessing the customer page
 def check_role_restaurant(user):
@@ -203,6 +204,8 @@ def custDashboard(request):
 @login_required(login_url='login')
 @user_passes_test(check_role_restaurant)
 def restaurantDashboard(request):
+    restaurant=Restaurant.objects.get(user=request.user)
+
     return render(request,'accounts/restaurantDashboard.html')
 
 def forgot_password(request):

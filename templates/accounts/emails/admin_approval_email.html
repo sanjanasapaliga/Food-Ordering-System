@@ -1,0 +1,10 @@
+{% autoescape off%}
+
+Hii  {{user.first_name}},
+
+{% if is_approved%}
+Congratulations your restaurant has been approved by our admin !!!
+{% else %}
+We are sorry you are not eligible for publishing your Restaurant at our marketplace
+{% endif%}
+{% endautoescape %}

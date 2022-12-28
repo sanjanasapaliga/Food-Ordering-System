@@ -13,7 +13,7 @@ def post_save_create_profile_receiver(sender,instance,created,**kwargs):
     if created:
         #create user profile as soon as the user is created
         UserProfile.objects.create(user=instance)
-        print('Create user profile')
+        
     else:
         try:
             profile = UserProfile.objects.get(user=instance)
