@@ -26,6 +26,7 @@
 											<ul>
 												<li>
 													<div class="row">
+														
 														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 															<div class="restaurant-info">
 																<div class="img-holder">
@@ -86,7 +87,7 @@
 																		<li class="gal-img">
 																			<div class="drag-list">
 																				<div class="item-thumb">
-																					<img class="thumbnail" src="{{vendor.vendor_license.url}}" alt="Vendor License">
+																					<img class="thumbnail" src="{{restaurant.restaurant_license.url}}" alt="Vendor License">
 																				</div>
 																			</div>
 																		</li>
@@ -95,17 +96,17 @@
 																<div class="text-holder">
 																	<label>Update License</label>
 																	<div class="upload-gallery">
-																		{{vendor_form.vendor_license}}
+																		{{restaurant_form.restaurant_license}}
 																	</div>
 																	
 																</div>
-																<label class="text-danger">{{ vendor_form.vendor_license.errors }}</label>
+																<label class="text-danger">{{ restaurant_form.restaurant_license.errors }}</label>
 															</div>
 														</div>
 														<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 															<div class="field-holder">
 																<label>Restaurant name *</label>
-																{{vendor_form.vendor_name}}
+																{{restaurant_form.restaurant_name}}
 															</div>
 														</div>
                                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
