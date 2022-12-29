@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 # from menu.forms import CategoryForm, FoodItemForm
 # from orders.models import Order, OrderedFood
-# import vendor
+# import restaurant
 from .forms import RestaurantForm #, OpeningHourForm
 from accounts.forms import UserProfileForm
 
@@ -16,13 +16,13 @@ from django.contrib import messages
 
 from django.contrib.auth.decorators import login_required, user_passes_test
 from accounts.views import check_role_restaurant
-# from menu.models import Category, FoodItem
+from menu.models import Category, FoodItem
 # from django.template.defaultfilters import slugify
 
 
-# def get_vendor(request):
-#     vendor = Vendor.objects.get(user=request.user)
-#     return vendor
+def get_restaurant(request):
+    restaurant = Restaurant.objects.get(user=request.user)
+    return restaurant
 
 
 @login_required(login_url='login')
@@ -55,39 +55,39 @@ def rprofile(request):
     return render(request, 'restaurant/rprofile.html',context)
 
 
-# @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
-# def menu_builder(request):
-#     vendor = get_vendor(request)
-#     categories = Category.objects.filter(vendor=vendor).order_by('created_at')
-#     context = {
-#         'categories': categories,
-#     }
-#     return render(request, 'vendor/menu_builder.html', context)
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def menu_builder(request):
+    restaurant = get_restaurant(request)
+    categories = Category.objects.filter(restaurant=restaurant).order_by('created_at')
+    context = {
+        'categories': categories,
+    }
+    return render(request, 'restaurant/menu_builder.html',context)
+
+
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def fooditems_by_category(request, pk=None):
+    restaurant = get_restaurant(request)
+    category = get_object_or_404(Category, pk=pk)
+    fooditems = FoodItem.objects.filter(restaurant=restaurant, category=category)
+    context = {
+        'fooditems': fooditems,
+        'category': category,
+    }
+    return render(request, 'restaurant/fooditems_by_category.html', context)
 
 
 # @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
-# def fooditems_by_category(request, pk=None):
-#     vendor = get_vendor(request)
-#     category = get_object_or_404(Category, pk=pk)
-#     fooditems = FoodItem.objects.filter(vendor=vendor, category=category)
-#     context = {
-#         'fooditems': fooditems,
-#         'category': category,
-#     }
-#     return render(request, 'vendor/fooditems_by_category.html', context)
-
-
-# @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
+# @user_passes_test(check_role_restaurant)
 # def add_category(request):
 #     if request.method == 'POST':
 #         form = CategoryForm(request.POST)
 #         if form.is_valid():
 #             category_name = form.cleaned_data['category_name']
 #             category = form.save(commit=False)
-#             category.vendor = get_vendor(request)
+#             category.restaurant = get_restaurant(request)
             
 #             category.save() # here the category id will be generated
 #             category.slug = slugify(category_name)+'-'+str(category.id) # chicken-15
@@ -102,11 +102,11 @@ def rprofile(request):
 #     context = {
 #         'form': form,
 #     }
-#     return render(request, 'vendor/add_category.html', context)
+#     return render(request, 'restaurant/add_category.html', context)
 
 
 # @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
+# @user_passes_test(check_role_restaurant)
 # def edit_category(request, pk=None):
 #     category = get_object_or_404(Category, pk=pk)
 #     if request.method == 'POST':
@@ -114,7 +114,7 @@ def rprofile(request):
 #         if form.is_valid():
 #             category_name = form.cleaned_data['category_name']
 #             category = form.save(commit=False)
-#             category.vendor = get_vendor(request)
+#             category.restaurant = get_restaurant(request)
 #             category.slug = slugify(category_name)
 #             form.save()
 #             messages.success(request, 'Category updated successfully!')
@@ -128,11 +128,11 @@ def rprofile(request):
 #         'form': form,
 #         'category': category,
 #     }
-#     return render(request, 'vendor/edit_category.html', context)
+#     return render(request, 'restaurant/edit_category.html', context)
 
 
 # @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
+# @user_passes_test(check_role_restaurant)
 # def delete_category(request, pk=None):
 #     category = get_object_or_404(Category, pk=pk)
 #     category.delete()
@@ -141,14 +141,14 @@ def rprofile(request):
 
 
 # @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
+# @user_passes_test(check_role_restaurant)
 # def add_food(request):
 #     if request.method == 'POST':
 #         form = FoodItemForm(request.POST, request.FILES)
 #         if form.is_valid():
 #             foodtitle = form.cleaned_data['food_title']
 #             food = form.save(commit=False)
-#             food.vendor = get_vendor(request)
+#             food.restaurant = get_restaurant(request)
 #             food.slug = slugify(foodtitle)
 #             form.save()
 #             messages.success(request, 'Food Item added successfully!')
@@ -158,16 +158,16 @@ def rprofile(request):
 #     else:
 #         form = FoodItemForm()
 #         # modify this form
-#         form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
+#         form.fields['category'].queryset = Category.objects.filter(restaurant=get_restaurant(request))
 #     context = {
 #         'form': form,
 #     }
-#     return render(request, 'vendor/add_food.html', context)
+#     return render(request, 'restaurant/add_food.html', context)
 
 
 
 # @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
+# @user_passes_test(check_role_restaurant)
 # def edit_food(request, pk=None):
 #     food = get_object_or_404(FoodItem, pk=pk)
 #     if request.method == 'POST':
@@ -175,7 +175,7 @@ def rprofile(request):
 #         if form.is_valid():
 #             foodtitle = form.cleaned_data['food_title']
 #             food = form.save(commit=False)
-#             food.vendor = get_vendor(request)
+#             food.restaurant = get_restaurant(request)
 #             food.slug = slugify(foodtitle)
 #             form.save()
 #             messages.success(request, 'Food Item updated successfully!')
@@ -185,16 +185,16 @@ def rprofile(request):
 
 #     else:
 #         form = FoodItemForm(instance=food)
-#         form.fields['category'].queryset = Category.objects.filter(vendor=get_vendor(request))
+#         form.fields['category'].queryset = Category.objects.filter(restaurant=get_restaurant(request))
 #     context = {
 #         'form': form,
 #         'food': food,
 #     }
-#     return render(request, 'vendor/edit_food.html', context)
+#     return render(request, 'restaurant/edit_food.html', context)
 
 
 # @login_required(login_url='login')
-# @user_passes_test(check_role_vendor)
+# @user_passes_test(check_role_restaurant)
 # def delete_food(request, pk=None):
 #     food = get_object_or_404(FoodItem, pk=pk)
 #     food.delete()
@@ -203,13 +203,13 @@ def rprofile(request):
 
 
 # def opening_hours(request):
-#     opening_hours = OpeningHour.objects.filter(vendor=get_vendor(request))
+#     opening_hours = OpeningHour.objects.filter(restaurant=get_restaurant(request))
 #     form = OpeningHourForm()
 #     context = {
 #         'form': form,
 #         'opening_hours': opening_hours,
 #     }
-#     return render(request, 'vendor/opening_hours.html', context)
+#     return render(request, 'restaurant/opening_hours.html', context)
 
 
 # def add_opening_hours(request):
@@ -222,7 +222,7 @@ def rprofile(request):
 #             is_closed = request.POST.get('is_closed')
             
 #             try:
-#                 hour = OpeningHour.objects.create(vendor=get_vendor(request), day=day, from_hour=from_hour, to_hour=to_hour, is_closed=is_closed)
+#                 hour = OpeningHour.objects.create(restaurant=get_restaurant(request), day=day, from_hour=from_hour, to_hour=to_hour, is_closed=is_closed)
 #                 if hour:
 #                     day = OpeningHour.objects.get(id=hour.id)
 #                     if day.is_closed:
@@ -248,25 +248,25 @@ def rprofile(request):
 # def order_detail(request, order_number):
 #     try:
 #         order = Order.objects.get(order_number=order_number, is_ordered=True)
-#         ordered_food = OrderedFood.objects.filter(order=order, fooditem__vendor=get_vendor(request))
+#         ordered_food = OrderedFood.objects.filter(order=order, fooditem__restaurant=get_restaurant(request))
 
 #         context = {
 #             'order': order,
 #             'ordered_food': ordered_food,
-#             'subtotal': order.get_total_by_vendor()['subtotal'],
-#             'tax_data': order.get_total_by_vendor()['tax_dict'],
-#             'grand_total': order.get_total_by_vendor()['grand_total'],
+#             'subtotal': order.get_total_by_restaurant()['subtotal'],
+#             'tax_data': order.get_total_by_restaurant()['tax_dict'],
+#             'grand_total': order.get_total_by_restaurant()['grand_total'],
 #         }
 #     except:
-#         return redirect('vendor')
-#     return render(request, 'vendor/order_detail.html', context)
+#         return redirect('restaurant')
+#     return render(request, 'restaurant/order_detail.html', context)
 
 
 # def my_orders(request):
-#     vendor = Vendor.objects.get(user=request.user)
-#     orders = Order.objects.filter(vendors__in=[vendor.id], is_ordered=True).order_by('created_at')
+#     restaurant = Vendor.objects.get(user=request.user)
+#     orders = Order.objects.filter(restaurants__in=[restaurant.id], is_ordered=True).order_by('created_at')
 
 #     context = {
 #         'orders': orders,
 #     }
-#     return render(request, 'vendor/my_orders.html', context)
+#     return render(request, 'restaurant/my_orders.html', context)

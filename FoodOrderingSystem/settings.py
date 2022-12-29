@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'accounts',
-    'restaurant'
+    'restaurant',
+    'menu'
 ]
 AUTH_USER_MODEL='accounts.User'
 MIDDLEWARE = [
@@ -68,6 +69,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'accounts.context_processors.get_restaurant',
+                'accounts.context_processors.get_google_api',
+                
             ],
         },
     },
@@ -154,7 +157,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'Food Ordering system <sanjdevelops@gmail.com>'
 
-# GOOGLE_API_KEY = config('GOOGLE_API_KEY')
+GOOGLE_API_KEY = 'AIzaSyC4yTudrg9pTcB2khAgrbCMBfVvbviohVU' # config('GOOGLE_API_KEY')
 
 # if DEBUG == True:
 #     os.environ['PATH'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
