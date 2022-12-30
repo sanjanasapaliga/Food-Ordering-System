@@ -4,7 +4,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 # from django.db import IntegrityError
 
-from menu.forms import CategoryForm #, FoodItemForm
+from menu.forms import CategoryForm , FoodItemForm
 # from orders.models import Order, OrderedFood
 # import restaurant
 from .forms import RestaurantForm #, OpeningHourForm
@@ -141,66 +141,67 @@ def delete_category(request, pk=None):
     return redirect('menu_builder')
 
 
-# @login_required(login_url='login')
-# @user_passes_test(check_role_restaurant)
-# def add_food(request):
-#     if request.method == 'POST':
-#         form = FoodItemForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             foodtitle = form.cleaned_data['food_title']
-#             food = form.save(commit=False)
-#             food.restaurant = get_restaurant(request)
-#             food.slug = slugify(foodtitle)
-#             form.save()
-#             messages.success(request, 'Food Item added successfully!')
-#             return redirect('fooditems_by_category', food.category.id)
-#         else:
-#             print(form.errors)
-#     else:
-#         form = FoodItemForm()
-#         # modify this form
-#         form.fields['category'].queryset = Category.objects.filter(restaurant=get_restaurant(request))
-#     context = {
-#         'form': form,
-#     }
-#     return render(request, 'restaurant/add_food.html', context)
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def add_food(request):
+    form=FoodItemForm()
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES)
+        if form.is_valid():
+            foodtitle = form.cleaned_data['food_title']
+            food = form.save(commit=False)
+            food.restaurant = get_restaurant(request)
+            food.slug = slugify(foodtitle)
+            form.save()
+            messages.success(request, 'Food Item added successfully!')
+            return redirect('fooditems_by_category', food.category.id)
+        else:
+            print(form.errors)
+    else:
+        form = FoodItemForm()
+        # modify this form
+        form.fields['category'].queryset = Category.objects.filter(restaurant=get_restaurant(request))
+    context = {
+        'form': form,
+    }
+    return render(request, 'restaurant/add_food.html',context)
 
 
 
-# @login_required(login_url='login')
-# @user_passes_test(check_role_restaurant)
-# def edit_food(request, pk=None):
-#     food = get_object_or_404(FoodItem, pk=pk)
-#     if request.method == 'POST':
-#         form = FoodItemForm(request.POST, request.FILES, instance=food)
-#         if form.is_valid():
-#             foodtitle = form.cleaned_data['food_title']
-#             food = form.save(commit=False)
-#             food.restaurant = get_restaurant(request)
-#             food.slug = slugify(foodtitle)
-#             form.save()
-#             messages.success(request, 'Food Item updated successfully!')
-#             return redirect('fooditems_by_category', food.category.id)
-#         else:
-#             print(form.errors)
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def edit_food(request, pk=None):
+    food = get_object_or_404(FoodItem, pk=pk)
+    if request.method == 'POST':
+        form = FoodItemForm(request.POST, request.FILES, instance=food)
+        if form.is_valid():
+            foodtitle = form.cleaned_data['food_title']
+            food = form.save(commit=False)
+            food.restaurant = get_restaurant(request)
+            food.slug = slugify(foodtitle)
+            form.save()
+            messages.success(request, 'Food Item updated successfully!')
+            return redirect('fooditems_by_category', food.category.id)
+        else:
+            print(form.errors)
 
-#     else:
-#         form = FoodItemForm(instance=food)
-#         form.fields['category'].queryset = Category.objects.filter(restaurant=get_restaurant(request))
-#     context = {
-#         'form': form,
-#         'food': food,
-#     }
-#     return render(request, 'restaurant/edit_food.html', context)
+    else:
+        form = FoodItemForm(instance=food)
+        form.fields['category'].queryset = Category.objects.filter(restaurant=get_restaurant(request))
+    context = {
+        'form': form,
+        'food': food,
+    }
+    return render(request, 'restaurant/edit_food.html', context)
 
 
-# @login_required(login_url='login')
-# @user_passes_test(check_role_restaurant)
-# def delete_food(request, pk=None):
-#     food = get_object_or_404(FoodItem, pk=pk)
-#     food.delete()
-#     messages.success(request, 'Food Item has been deleted successfully!')
-#     return redirect('fooditems_by_category', food.category.id)
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def delete_food(request, pk=None):
+    food = get_object_or_404(FoodItem, pk=pk)
+    food.delete()
+    messages.success(request, 'Food Item has been deleted successfully!')
+    return redirect('fooditems_by_category', food.category.id)
 
 
 # def opening_hours(request):
