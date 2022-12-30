@@ -1,10 +1,10 @@
 # from unicodedata import category
-# from urllib import response
-# from django.http import HttpResponse, JsonResponse
+from urllib import response
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 # from django.db import IntegrityError
 
-# from menu.forms import CategoryForm, FoodItemForm
+from menu.forms import CategoryForm #, FoodItemForm
 # from orders.models import Order, OrderedFood
 # import restaurant
 from .forms import RestaurantForm #, OpeningHourForm
@@ -17,7 +17,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from accounts.views import check_role_restaurant
 from menu.models import Category, FoodItem
-# from django.template.defaultfilters import slugify
+from django.template.defaultfilters import slugify
 
 
 def get_restaurant(request):
@@ -79,65 +79,66 @@ def fooditems_by_category(request, pk=None):
     return render(request, 'restaurant/fooditems_by_category.html', context)
 
 
-# @login_required(login_url='login')
-# @user_passes_test(check_role_restaurant)
-# def add_category(request):
-#     if request.method == 'POST':
-#         form = CategoryForm(request.POST)
-#         if form.is_valid():
-#             category_name = form.cleaned_data['category_name']
-#             category = form.save(commit=False)
-#             category.restaurant = get_restaurant(request)
-            
-#             category.save() # here the category id will be generated
-#             category.slug = slugify(category_name)+'-'+str(category.id) # chicken-15
-#             category.save()
-#             messages.success(request, 'Category added successfully!')
-#             return redirect('menu_builder')
-#         else:
-#             print(form.errors)
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def add_category(request):
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        try:
+            if form.is_valid():
+                category_name = form.cleaned_data['category_name']
+                category = form.save(commit=False)
+                category.restaurant = get_restaurant(request)
+                
+                category.slug = slugify(category_name)# chicken-15
+                form.save()
+                messages.success(request, 'Category added successfully!')
+                return redirect('menu_builder')
+        except:
+            messages.error(request, 'category exists')
+            print(form.errors)
 
-#     else:
-#         form = CategoryForm()
-#     context = {
-#         'form': form,
-#     }
-#     return render(request, 'restaurant/add_category.html', context)
-
-
-# @login_required(login_url='login')
-# @user_passes_test(check_role_restaurant)
-# def edit_category(request, pk=None):
-#     category = get_object_or_404(Category, pk=pk)
-#     if request.method == 'POST':
-#         form = CategoryForm(request.POST, instance=category)
-#         if form.is_valid():
-#             category_name = form.cleaned_data['category_name']
-#             category = form.save(commit=False)
-#             category.restaurant = get_restaurant(request)
-#             category.slug = slugify(category_name)
-#             form.save()
-#             messages.success(request, 'Category updated successfully!')
-#             return redirect('menu_builder')
-#         else:
-#             print(form.errors)
-
-#     else:
-#         form = CategoryForm(instance=category)
-#     context = {
-#         'form': form,
-#         'category': category,
-#     }
-#     return render(request, 'restaurant/edit_category.html', context)
+    else:
+        form =CategoryForm()
+    context = {
+        'form': form,
+    }
+    return render(request, 'restaurant/add_category.html',context)
 
 
-# @login_required(login_url='login')
-# @user_passes_test(check_role_restaurant)
-# def delete_category(request, pk=None):
-#     category = get_object_or_404(Category, pk=pk)
-#     category.delete()
-#     messages.success(request, 'Category has been deleted successfully!')
-#     return redirect('menu_builder')
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def edit_category(request, pk=None):
+    category = get_object_or_404(Category, pk=pk)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=category)
+        if form.is_valid():
+            category_name = form.cleaned_data['category_name']
+            category = form.save(commit=False)
+            category.restaurant = get_restaurant(request)
+            category.slug = slugify(category_name)
+            form.save()
+            messages.success(request, 'Category updated successfully!')
+            return redirect('menu_builder')
+        else:
+            print(form.errors)
+
+    else:
+        form = CategoryForm(instance=category)
+    context = {
+        'form': form,
+        'category': category,
+    }
+    return render(request, 'restaurant/edit_category.html', context)
+
+
+@login_required(login_url='login')
+@user_passes_test(check_role_restaurant)
+def delete_category(request, pk=None):
+    category = get_object_or_404(Category, pk=pk)
+    category.delete()
+    messages.success(request, 'Category has been deleted successfully!')
+    return redirect('menu_builder')
 
 
 # @login_required(login_url='login')
