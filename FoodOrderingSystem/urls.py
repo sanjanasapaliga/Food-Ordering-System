@@ -23,5 +23,18 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',views.home,name='home'),
     #when someone clicks the accounts it should navigate to url in accounts app
-    path('',include('accounts.urls'))
+    path('',include('accounts.urls')),
+    path('marketplace/', include('marketplace.urls')),
+
+    # CART
+    # path('cart/', MarketplaceViews.cart, name='cart'),
+    # SEARCH
+    # path('search/', MarketplaceViews.search, name='search'),
+
+    # CHECKOUT
+    # path('checkout/', MarketplaceViews.checkout, name='checkout'),
+
+    # ORDERS
+    # path('orders/', include('orders.urls')),
+
 ]+static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

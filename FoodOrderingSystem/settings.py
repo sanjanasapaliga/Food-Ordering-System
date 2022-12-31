@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     
     'accounts',
     'restaurant',
-    'menu'
+    'menu',
+    'marketplace',
 ]
 AUTH_USER_MODEL='accounts.User'
 MIDDLEWARE = [

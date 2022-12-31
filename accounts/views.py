@@ -11,6 +11,8 @@ from .utils import detectUser,send_verification_email
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.core.exceptions import PermissionDenied
 from restaurant.models import Restaurant
+from django.template.defaultfilters import slugify
+
 
 # Restrict the vendor from accessing the customer page
 def check_role_restaurant(user):
@@ -87,7 +89,10 @@ def registerRestaurant(request):
             user.role = User.restaurant
             user.save()
             restaurant=r_form.save(commit=False)
+            
             restaurant.user=user
+            restaurant_name=r_form.cleaned_data['restaurant_name']
+            restaurant.restaurant_slug=slugify(restaurant_name)+'-'+str(user.id)
             user_profile=UserProfile.objects.get(user=user)
             restaurant.user_profile=user_profile
             restaurant.save()

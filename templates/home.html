@@ -108,46 +108,19 @@
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<div class="company-logo">
 							<ul>
+								{% for restaurant in restaurants %}
 								<li class="has-border">
 									<figure>
-										<a href="#"><img src="{% static 'extra-images/listing-logo18.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
+										{% if restaurant.user_profile.profile_picture %}
+										<a href="#"><img src="{{restaurant.user_profile.profile_picture.url}}" class="attachment-full size-full wp-post-image" alt=""></a>
+										{% else %}
+										<a href="#"><img src="{% static 'images/default-profile.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
+
+										{% endif%}
 									</figure>
 								</li>
-								<li class="has-border">
-									<figure>
-										<a href="#"><img src="{% static 'extra-images/fb-restaurant-02.jpg'%}" class="attachment-full size-full wp-post-image" alt=""></a>
-									</figure>
-								</li>
-								<li class="has-border">
-									<figure>
-										<a href="#"><img src="{%  static 'extra-images/fb-restaurant-04.jpg'%}" class="attachment-full size-full wp-post-image" alt=""></a>
-									</figure>
-								</li>
-								<li class="has-border">
-									<figure>
-										<a href="#"><img src="{%  static 'extra-images/fb-restaurant-06.jpg'%}" class="attachment-full size-full wp-post-image" alt=""></a>
-									</figure>
-								</li>
-								<li class="has-border">
-									<figure>
-										<a href="#"><img src="{%  static 'extra-images/xlisting-logo03.png.pagespeed.ic_.aT-o9LinEJ.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
-									</figure>
-								</li>
-								<li class="has-border">
-									<figure>
-										<a href="#"><img src="{% static 'extra-images/listing-logo09.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
-									</figure>
-								</li>
-								<li class="has-border">
-									<figure>
-										<a href="#"><img src="{% static 'extra-images/listing-logo18.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
-									</figure>
-								</li>
-								<li class="has-border">
-									<figure>
-										<a href="#"><img src="{% static 'extra-images/fb-restaurant-09.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
-									</figure>
-								</li>
+								{% endfor %}
+								
 							</ul>
 						</div>
 					</div>
@@ -168,10 +141,18 @@
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 						<div class="listing fancy">
 							<ul class="row">
+								{% for restaurant in restaurants %}
+
 								<li class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
 									<div class="list-post featured">
 										<div class="img-holder">
-											<figure><a href="#"><img src="{% static 'extra-images/listing-logo18.png'%}" class="img-thumb wp-post-image" alt=""></a></figure>
+										{% if restaurant.user_profile.profile_picture %}
+
+											<figure><a href="#"><img src="{{restaurant.user_profile.profile_picture.url}}" class="img-thumb wp-post-image" alt=""></a></figure>
+											{% else %}
+											<figure><a href="#"><img src="{% static 'images/default-profile.png'%}" class="img-thumb wp-post-image" alt=""></a></figure>
+
+											{% endif %}
 											<span class="restaurant-status close">
 												<em class="bookmarkRibbon"></em>Close
 											</span>
@@ -185,16 +166,20 @@
 											</div>
 											<div class="post-title">
 												<h5>
-													<a href="listing-detail.html">Restaurant Demo</a>
+													<a href="listing-detail.html">{{restaurant.restaurant_name}}</a>
 													<span class="sponsored text-color">Sponsored</span>
 												</h5>
 											</div>
-											<address> <span>Type of food : </span> Apple Juice</address>
+											<span>Type of food : </span> 
+											<br>
+											{% if restaurant.user_profile.city and restaurant.user_profile.state  %}
+											<span>{{restaurant.user_profile.city}},{{restaurant.user_profile.state}}<span>
+											{% endif %}
 										</div>
 										
 									</div>
 								</li>
-								
+								{% endfor %}
 								
 								
 								
