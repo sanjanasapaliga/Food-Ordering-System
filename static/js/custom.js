@@ -83,14 +83,20 @@ $(document).ready(function() {
             type: 'GET',
             url: url,
             success: function(response) {
-                console.log(response)
+                // console.log(response)
                 if (response.status == 'login_required') {
+                    console.log('espologin_required')
+
                     swal(response.message, '', 'info').then(function() {
                         window.location = '/login';
                     })
                 } else if (response.status == 'Failed') {
+                    console.log('failed')
+
                     swal(response.message, '', 'error')
                 } else {
+                    console.log('adding')
+
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     $('#qty-' + food_id).html(response.qty);
 
@@ -136,6 +142,8 @@ $(document).ready(function() {
                 } else {
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     $('#qty-' + food_id).html(response.qty);
+                    removeCartItem(response.qty, cart_id);
+
 
                     applyCartAmounts(
                         response.cart_amount['subtotal'],
@@ -173,11 +181,11 @@ $(document).ready(function() {
                     $('#cart_counter').html(response.cart_counter['cart_count']);
                     swal(response.status, response.message, "success")
 
-                    applyCartAmounts(
-                        response.cart_amount['subtotal'],
-                        response.cart_amount['tax_dict'],
-                        response.cart_amount['grand_total']
-                    )
+                    // applyCartAmounts(
+                    //     response.cart_amount['subtotal'],
+                    //     response.cart_amount['tax_dict'],
+                    //     response.cart_amount['grand_total']
+                    // )
 
                     removeCartItem(0, cart_id);
                     checkEmptyCart();
