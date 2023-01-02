@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from .context_processors import get_cart_counter, get_cart_amounts
 from menu.models import Category, FoodItem
 
-from restaurant.models import  Restaurant #,OpeningHour
+from restaurant.models import  Restaurant ,OpeningHour
 from django.db.models import Prefetch
 from .models import Cart 
 from django.contrib.auth.decorators import login_required
@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 # from django.contrib.gis.measure import D # ``D`` is a shortcut for ``Distance``
 # from django.contrib.gis.db.models.functions import Distance
 
-# from datetime import date, datetime
+from datetime import date, datetime
 # from orders.forms import OrderForm
 
 
@@ -39,13 +39,13 @@ def restaurant_detail(request, restaurant_slug):
         )
     )
 
-#     opening_hours = OpeningHour.objects.filter(restaurant=restaurant).order_by('day', 'from_hour')
+    opening_hours = OpeningHour.objects.filter(restaurant=restaurant).order_by('day', '-from_hour')
     
 #     # Check current day's opening hours.
-#     today_date = date.today()
-#     today = today_date.isoweekday()
+    today_date = date.today()
+    today = today_date.isoweekday()
     
-#     current_opening_hours = OpeningHour.objects.filter(restaurant=restaurant, day=today)
+    current_opening_hours = OpeningHour.objects.filter(restaurant=restaurant, day=today)
     if request.user.is_authenticated:
         cart_items = Cart.objects.filter(user=request.user)
     else:
@@ -54,8 +54,8 @@ def restaurant_detail(request, restaurant_slug):
         'restaurant': restaurant,
         'categories': categories,
         'cart_items': cart_items,
-#         'opening_hours': opening_hours,
-#         'current_opening_hours': current_opening_hours,
+        'opening_hours': opening_hours,
+        'current_opening_hours': current_opening_hours,
     }
     return render(request, 'marketplace/restaurant_detail.html',context)
 
@@ -138,7 +138,8 @@ def delete_cart(request, cart_id):
             return JsonResponse({'status': 'Failed', 'message': 'Invalid request!'})
 
 
-# def search(request):
+def search(request):
+    return HttpResponse('search')
 #     if not 'address' in request.GET:
 #         return redirect('marketplace')
 #     else:
