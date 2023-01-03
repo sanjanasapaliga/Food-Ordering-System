@@ -69,7 +69,7 @@
 								</div>
 						</div>
 						<div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
-							<div class="login-option">
+							<div class="login-option" style="width: max-content;">
 								{% if user.is_authenticated%}
 
 								<a href="{% url 'cart' %}">
@@ -95,7 +95,7 @@
 								<a class="cs-color cs-popup-joinus-btn login-popup"  href="{% url 'registerUser'%}">
 								   Register
 								</a>
-								<a class="get-start-btn" style="margin:0 0 0 0" href="{% url 'registerRestaurant'%}">
+								<a class="get-start-btn" style="margin:0 0 0 20px" href="{% url 'registerRestaurant'%}">
 									Register
 									Restaurant 
 								</a>

@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'restaurant',
     'menu',
     'marketplace',
+    'customers',
 ]
 AUTH_USER_MODEL='accounts.User'
 MIDDLEWARE = [
@@ -71,6 +72,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'accounts.context_processors.get_restaurant',
                 'accounts.context_processors.get_google_api',
+                'accounts.context_processors.get_user_profile'
                 'marketplace.context_processors.get_cart_counter',
                 'marketplace.context_processors.get_cart_amounts',
                 
