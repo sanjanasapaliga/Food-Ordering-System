@@ -88,13 +88,7 @@
                                                     <span id="subtotal">{{ subtotal }}</span>
                                                 </span>
                                             </li>
-                                            <li style="list-style-type: none;">
-                                                Tax
-                                                <span class="price float-right">
-                                                    <span class="currency">₹</span>
-                                                    <span id="subtotaltax">0</span>
-                                                </span>
-                                            </li>
+                                           
                                             {% for key, value in tax_dict.items %}
                                                 {% for i, j in value.items %}
                                                     <li style="list-style-type: none;">
