@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'menu',
     'marketplace',
     'customers',
+    'orders',
 ]
 AUTH_USER_MODEL='accounts.User'
 MIDDLEWARE = [
@@ -72,9 +73,11 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'accounts.context_processors.get_restaurant',
                 'accounts.context_processors.get_google_api',
-                'accounts.context_processors.get_user_profile'
+                'accounts.context_processors.get_user_profile',
                 'marketplace.context_processors.get_cart_counter',
                 'marketplace.context_processors.get_cart_amounts',
+                'accounts.context_processors.get_paypal_client_id',
+                
                 
             ],
         },
@@ -169,9 +172,9 @@ GOOGLE_API_KEY = 'AIzaSyC4yTudrg9pTcB2khAgrbCMBfVvbviohVU' # config('GOOGLE_API_
 #     os.environ['PROJ_LIB'] = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
 #     GDAL_LIBRARY_PATH = os.path.join(BASE_DIR, 'env\Lib\site-packages\osgeo\gdal304.dll')
 
-# PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
+PAYPAL_CLIENT_ID = config('PAYPAL_CLIENT_ID')
 
-# SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 # RZP_KEY_ID = config('RZP_KEY_ID')
 # RZP_KEY_SECRET = config('RZP_KEY_SECRET')
