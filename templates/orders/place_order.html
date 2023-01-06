@@ -100,15 +100,15 @@
                                                 </span>
                                             </li>
                                             
-                                            {% comment %} {% if order.payment_method == 'PayPal' %} {% endcomment %}
+                                            {% if order.payment_method == 'PayPal' %}
                                             <!-- PayPal Checkout Button -->
                                             <div id="paypal-button-container"></div>
-                                            {% comment %} {% elif order.payment_method == 'RazorPay' %} {% endcomment %}
-                                            {% comment %} <div id="rzp_payment_button">
+                                            {% elif order.payment_method == 'RazorPay' %}
+                                            <div id="rzp_payment_button">
                                                 <button class="btn btn-danger w-100 p-2" id="rzp-button1">Pay with RazorPay</button>
                                                 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-                                            </div> {% endcomment %}
-                                            {% comment %} {% endif %} {% endcomment %}
+                                            </div>
+                                             {% endif %} 
                                         </ul>
                                     </div>
                                     
@@ -188,7 +188,7 @@
     }).render('#paypal-button-container');
 
     // RazorPay Payment Gateway
-    {% comment %} var options = {
+    var options = {
             "key": "{{ RZP_KEY_ID }}", // Enter the Key ID generated from the Dashboard
             "amount": "{{ rzp_amount }}", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
@@ -235,7 +235,7 @@
     document.getElementById('rzp-button1').onclick = function(e){
         rzp1.open();
         e.preventDefault();
-    } {% endcomment %}
+    } 
     // RazorPay Payment Gateway
 
 
