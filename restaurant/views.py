@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.db import IntegrityError
 
 from menu.forms import CategoryForm , FoodItemForm
-# from orders.models import Order, OrderedFood
+from orders.models import Order, OrderedFood
 # import restaurant
 from .forms import RestaurantForm , OpeningHourForm
 from accounts.forms import UserProfileForm
@@ -249,28 +249,28 @@ def remove_opening_hours(request, pk=None):
             return JsonResponse({'status': 'success', 'id': pk})
 
 
-# def order_detail(request, order_number):
-#     try:
-#         order = Order.objects.get(order_number=order_number, is_ordered=True)
-#         ordered_food = OrderedFood.objects.filter(order=order, fooditem__restaurant=get_restaurant(request))
+def order_detail(request, order_number):
+    try:
+        order = Order.objects.get(order_number=order_number, is_ordered=True)
+        ordered_food = OrderedFood.objects.filter(order=order, fooditem__restaurant=get_restaurant(request))
 
-#         context = {
-#             'order': order,
-#             'ordered_food': ordered_food,
-#             'subtotal': order.get_total_by_restaurant()['subtotal'],
-#             'tax_data': order.get_total_by_restaurant()['tax_dict'],
-#             'grand_total': order.get_total_by_restaurant()['grand_total'],
-#         }
-#     except:
-#         return redirect('restaurant')
-#     return render(request, 'restaurant/order_detail.html', context)
+        context = {
+            'order': order,
+            'ordered_food': ordered_food,
+            'subtotal': order.get_total_by_restaurant()['subtotal'],
+            'tax_data': order.get_total_by_restaurant()['tax_dict'],
+            'grand_total': order.get_total_by_restaurant()['grand_total'],
+        }
+    except:
+        return redirect('restaurant')
+    return render(request, 'restaurant/order_detail.html', context)
 
 
-# def my_orders(request):
-#     restaurant = Vendor.objects.get(user=request.user)
-#     orders = Order.objects.filter(restaurants__in=[restaurant.id], is_ordered=True).order_by('created_at')
+def my_orders(request):
+    restaurant = Restaurant.objects.get(user=request.user)
+    orders = Order.objects.filter(restaurants__in=[restaurant.id], is_ordered=True).order_by('created_at')
 
-#     context = {
-#         'orders': orders,
-#     }
-#     return render(request, 'restaurant/my_orders.html', context)
+    context = {
+        'orders': orders,
+    }
+    return render(request, 'restaurant/my_orders.html', context)

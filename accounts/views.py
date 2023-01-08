@@ -13,6 +13,7 @@ from django.core.exceptions import PermissionDenied
 from restaurant.models import Restaurant
 from django.template.defaultfilters import slugify
 from orders.models import Order
+import datetime
 
 
 # Restrict the vendor from accessing the customer page
@@ -216,8 +217,25 @@ def custDashboard(request):
 @user_passes_test(check_role_restaurant)
 def restaurantDashboard(request):
     restaurant=Restaurant.objects.get(user=request.user)
-
-    return render(request,'accounts/restaurantDashboard.html')
+    orders=Order.objects.filter(restaurants__in=[restaurant.id],is_ordered=True).order_by('-created_at')
+    
+    # Current Months Revenue
+    current_month=datetime.datetime.now().month
+    current_month_orders = Order.objects.filter(restaurants__in=[restaurant.id],is_ordered=True,created_at__month=current_month)
+    current_month_revenue=0
+    for i in current_month_orders:
+        current_month_revenue += i.get_total_by_restaurant()['grand_total']
+    # Total Revenue
+    total_revenue=0
+    for i in orders:
+        total_revenue += i.get_total_by_restaurant()['grand_total']
+    context={
+        'orders':orders[:5],
+        'orders_count':orders.count(),
+        'total_revenue':total_revenue,
+        'current_month_revenue':current_month_revenue,
+    }
+    return render(request,'accounts/restaurantDashboard.html',context)
 
 def forgot_password(request):
     if request.method == 'POST':

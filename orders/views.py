@@ -3,6 +3,7 @@ from marketplace.models import Cart
 from marketplace.context_processors import get_cart_amounts
 from .forms import OrderForm
 from .models import Order,Payment,OrderedFood
+from marketplace.models import FoodItem,Tax
 import simplejson as json
 from django.http import JsonResponse
 from .utils import generate_order_number
@@ -21,6 +22,37 @@ def place_order(request):
     cart_count=cart_items.count()
     if cart_count<=0:
         return redirect('marketplace')
+    restaurant_ids=[]
+    for i in cart_items:
+        if i.fooditem.restaurant.id not in restaurant_ids:
+            restaurant_ids.append(i.fooditem.restaurant.id)
+            
+    get_tax=Tax.objects.filter(is_active=True)
+    
+    k={}
+    subtotal=0
+    total_data={}
+    for i in cart_items:
+        fooditem = FoodItem.objects.get(pk=i.fooditem.id,restaurant_id__in=restaurant_ids)
+        r_id=fooditem.restaurant.id
+        if r_id in k:
+            subtotal=k[r_id]
+            subtotal += (fooditem.price * i.quantity)
+            k[r_id]=subtotal
+        else:
+            subtotal=(fooditem.price * i.quantity)
+            k[r_id]=subtotal
+        tax_dict={}
+        for i in get_tax:
+            tax_type=i.tax_type
+            tax_percentage=i.tax_percentage
+            tax_amount=round((tax_percentage*subtotal)/100,2)
+            tax_dict.update({tax_type:{str(tax_percentage):str(tax_amount)}})
+        total_data.update({fooditem.restaurant.id:{str(subtotal):str(tax_dict)}})
+    print(total_data)
+
+    
+            
     subtotal= get_cart_amounts(request)['subtotal']
     print('subtotal'+str(subtotal))
     total_tax= get_cart_amounts(request)['tax']
@@ -43,12 +75,12 @@ def place_order(request):
             order.user = request.user
             order.total = grand_total
             order.tax_data = json.dumps(tax_data)
-            # order.total_data = json.dumps(total_data)
+            order.total_data = json.dumps(total_data)
             order.total_tax = total_tax
             order.payment_method = request.POST['payment_method']
             order.save() # order id/ pk is generated
             order.order_number = generate_order_number(order.id)
-            # order.restaurants.add(*restaurants_ids)
+            order.restaurants.add(*restaurant_ids)
             order.save()
             # RazorPay Payment
             DATA = {
