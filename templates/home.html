@@ -12,10 +12,9 @@
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
 						<div class="element-title">
 							<h1 style="font-size: 40px; color: #505050; text-transform: uppercase; line-height: 50px; margin-bottom: 25px; text-align:center;">
-								We are in the business of food<br>our restaurants do</h1>
+								We are in the business of food<br></h1>
 							<p style="font-size: 18px; letter-spacing: 1px; color: #505050; text-align:center;">
-								Ridiculus sociosqu
-								cursus neque cursus curae ante scelerisque vehicula.</p>
+								To enlighten the Foodie within you</p>
 						</div>
 					</div>
 					<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 ">
@@ -109,12 +108,12 @@
 						<div class="company-logo">
 							<ul>
 								{% for restaurant in restaurants %}
-								<li class="has-border">
+								<li class="has-border" style="margin-top:20px, width:195px">
 									<figure>
 										{% if restaurant.user_profile.profile_picture %}
-										<a href="#"><img src="{{restaurant.user_profile.profile_picture.url}}" class="attachment-full size-full wp-post-image" alt=""></a>
+										<a href="{% url 'restaurant_detail' restaurant.restaurant_slug %}"><img src="{{restaurant.user_profile.profile_picture.url}}" class="attachment-full size-full wp-post-image" alt=""></a>
 										{% else %}
-										<a href="#"><img src="{% static 'images/default-profile.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
+										<a href="{% url 'restaurant_detail' restaurant.restaurant_slug %}"><img src="{% static 'images/default-profile.png'%}" class="attachment-full size-full wp-post-image" alt=""></a>
 
 										{% endif%}
 									</figure>
@@ -148,9 +147,9 @@
 										<div class="img-holder">
 										{% if restaurant.user_profile.profile_picture %}
 
-											<figure><a href="#"><img src="{{restaurant.user_profile.profile_picture.url}}" class="img-thumb wp-post-image" alt=""></a></figure>
+											<figure><a href="{% url 'restaurant_detail' restaurant.restaurant_slug %}"><img src="{{restaurant.user_profile.profile_picture.url}}" class="img-thumb wp-post-image" alt=""></a></figure>
 											{% else %}
-											<figure><a href="#"><img src="{% static 'images/default-profile.png'%}" class="img-thumb wp-post-image" alt=""></a></figure>
+											<figure><a href="{% url 'restaurant_detail' restaurant.restaurant_slug %}"><img src="{% static 'images/default-profile.png'%}" class="img-thumb wp-post-image" alt=""></a></figure>
 
 											{% endif %}
 											{% if restaurant.is_open %}
@@ -174,7 +173,7 @@
 											</div>
 											<div class="post-title">
 												<h5>
-													<a href="listing-detail.html">{{restaurant.restaurant_name}}</a>
+													<a href="{% url 'restaurant_detail' restaurant.restaurant_slug %}">{{restaurant.restaurant_name}}</a>
 													<span class="sponsored text-color">Sponsored</span>
 												</h5>
 											</div>
